@@ -41,9 +41,11 @@ public class BluetoothBehavior : MonoBehaviour
         }
     }
 
+    BluetoothDevice tempDevice;
+
     // Start is called before the first frame update
     void Start()
-    {
+    {        
         text = GetComponent<Text>();
         AppendToMessage("Hello There!");
         AppendToMessage("This is a test :)");
@@ -59,13 +61,13 @@ public class BluetoothBehavior : MonoBehaviour
         string resultStream = setupOutputStream();
         AppendToMessage(resultStream);
 
-        StartCoroutine(sendMessages());
-        
+        StartCoroutine(sendMessages());        
 
     }
 
     IEnumerator sendMessages()
     {
+        
         string resultMsg = sendMessage("Hello!");
         AppendToMessage(resultMsg);
 
@@ -80,8 +82,6 @@ public class BluetoothBehavior : MonoBehaviour
         AppendToMessage(resultMsg);
 
         yield return new WaitForSeconds(1);
-
-        closeConnection();
     }
 
     void AppendToMessage(string msg)
