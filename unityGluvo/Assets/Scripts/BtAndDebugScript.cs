@@ -42,49 +42,58 @@ public class BtAndDebugScript : MonoBehaviour
 
     BluetoothDevice tempDevice;
 
-    //  NEED TO ASSIGN THE TEXT VARIABLE FROM THE UNITY EDITOR IF NOT
-    //  ASSIGNED ALREADY
-
     void Start()
     {
         string resultSearch = findDevice("ESP32test");
-        DisplaySingleLine(resultSearch);
+        AppendToMessage(resultSearch);
 
         string resultConnect = connectToDevice();
-        DisplaySingleLine(resultConnect);
+        AppendToMessage(resultConnect);
 
         string resultStream = setupOutputStream();
-        DisplaySingleLine(resultStream);
+        AppendToMessage(resultStream);
 
-        //StartCoroutine(sendMessages());
+        StartCoroutine(sendMessages());
 
     }
 
+    // This is for debugging only...
     IEnumerator sendMessages()
     {
 
         string resultMsg = sendMessage("Hello!");
-        DisplaySingleLine(resultMsg);
+        AppendToMessage(resultMsg);
 
         //yield return new WaitForSeconds(1);
 
         resultMsg = sendMessage("Hello 2!");
-        DisplaySingleLine(resultMsg);
+        AppendToMessage(resultMsg);
 
         //yield return new WaitForSeconds(1);
 
         resultMsg = sendMessage("Hello 3!");
-        DisplaySingleLine(resultMsg);
+        AppendToMessage(resultMsg);
 
         yield return new WaitForSeconds(1);
     }
 
+    // If given the array of right hand, displays right hand status of collision
+    public void DisplayRightHandStatus(int[] fingerArray)
+    {
+        ResetMsg();
+        string msg = "T | I | M | R | P\n" + fingerArray[0] + " | " + fingerArray[1] + " | " + fingerArray[2] + " | " + fingerArray[3] + " | " + fingerArray[4];
+        AppendToMessage(msg);
+
+    }
+
+    // DISPLAYS A SINGLE LINE, deletes any other line before
     public void DisplaySingleLine(string msg)
     {
         ResetMsg();
         AppendToMessage(msg);
     }
 
+    // APPENDS A LINE TO A MESSAGE
     public void AppendToMessage(string msg)
     {
         messageDisplayed += msg;
@@ -93,6 +102,7 @@ public class BtAndDebugScript : MonoBehaviour
         UpdateDisplayedText();
     }
 
+    // RESETS BOARD
     public void ResetMsg()
     {
         messageDisplayed = "";
