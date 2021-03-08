@@ -17,7 +17,7 @@ public class FingerScript : MonoBehaviour
 {
 
     public int fingerNum;
-
+    
     private HandControlScript parent_script;
 
     // Start is called before the first frame update
@@ -31,7 +31,6 @@ public class FingerScript : MonoBehaviour
     void OnTriggerEnter(Collider collide)
     {
         parent_script.OnTriggerFingerEnter(fingerNum, gameObject.transform, collide);
-
     }
 
     void OnTriggerExit(Collider collide)

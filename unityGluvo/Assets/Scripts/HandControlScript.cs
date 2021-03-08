@@ -107,8 +107,12 @@ public class HandControlScript : MonoBehaviour
     // and the thing it collided with 'collideWith'
     public void OnTriggerFingerEnter(int finger, Transform fingerPoint, Collider collideWith)
     {
+        // Color triggerColor = Color.red;
         rightArray[finger] = 1;
         bt_debug.DisplayRightHandStatus(rightArray);
+
+        // collideWith.GetComponent<Renderer> ().material.color = triggerColor;
+        // collideWith.attachedRigidbody.useGravity = true;
     }
 
     // Same as above, only difference is this is called when one of those colliders exits a collision
