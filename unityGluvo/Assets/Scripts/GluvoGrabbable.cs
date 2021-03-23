@@ -8,7 +8,9 @@ public class GluvoGrabbable : MonoBehaviour
     // NOTE: REQUIRES RIGIDBODY COMPONENT
 
     // Temporary solutions, fixes the grabbed object to this location
+    // Find a programmatic way to get these later
     public GameObject grabAnchor;
+    public GameObject trackingSpace;
 
     // Keep track of fingers being collided, we need both to be
     // in collision for grabbing
@@ -19,6 +21,7 @@ public class GluvoGrabbable : MonoBehaviour
     /// right_ring = 3;
     /// right_pinky = 4;
     private bool[] fingerCollisions = { false, false, false, false, false };
+    private bool isHolding = false;
 
 
     void Update()
@@ -33,14 +36,24 @@ public class GluvoGrabbable : MonoBehaviour
         if (fingerCollisions[0] & (fingerCollisions[1] || fingerCollisions[2] || fingerCollisions[3] || fingerCollisions[4]))       
         {
             transform.parent = grabAnchor.transform;
+            Rigidbody rb = GetComponent<Rigidbody>();
+            rb.isKinematic = false;
+            rb.useGravity = false;
+            isHolding = true;
         } 
-        else 
+        else if (isHolding)
         {
+            isHolding = false;
             transform.parent = null;
+            Rigidbody rb = GetComponent<Rigidbody>();
+            rb.isKinematic = false;
+            rb.useGravity = true;
+            rb.velocity = trackingSpace.transform.TransformVector(OVRInput.GetLocalControllerVelocity(OVRInput.Controller.All));
+            // rb.angularVelocity = grabAnchor.GetComponent<Rigidbody>().angularVelocity;
         }
         // Need to reset velocity or else whacky behavior
-        GetComponent<Rigidbody>().velocity = Vector3.zero;
-        GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        // GetComponent<Rigidbody>().velocity = Vector3.zero;
+        // GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
     }
 
 
