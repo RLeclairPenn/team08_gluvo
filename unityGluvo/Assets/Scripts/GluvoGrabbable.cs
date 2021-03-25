@@ -10,7 +10,15 @@ public class GluvoGrabbable : MonoBehaviour
     // Temporary solutions, fixes the grabbed object to this location
     // Find a programmatic way to get these later
     public GameObject grabAnchor;
-    public GameObject trackingSpace;
+    public GameObject bt_debug_obj;
+    private BtAndDebugScript bt_debug;
+
+
+    // Some variables for customization
+    public bool isStatic;
+    public bool freezeXRotation;
+    public bool freezeYRotation;
+    public bool freezeZRotation;
 
     // Keep track of fingers being collided, we need both to be
     // in collision for grabbing
@@ -23,11 +31,30 @@ public class GluvoGrabbable : MonoBehaviour
     private bool[] fingerCollisions = { false, false, false, false, false };
     private bool isHolding = false;
 
+    private Vector3 prev_pos;
+    private Vector3 curr_pos;
+    private Vector3 curr_vel;
+
+
+    private void Start()
+    {
+        prev_pos = Vector3.zero;
+        curr_pos = Vector3.zero;
+        curr_vel = Vector3.zero;
+
+
+        bt_debug = bt_debug_obj.GetComponent<BtAndDebugScript>();
+    }
+
 
     void Update()
     {
-        CheckAndGrabObject(); 
+        curr_pos = transform.position;
+        curr_vel = (curr_pos - prev_pos) / Time.deltaTime;
+        CheckAndGrabObject();
+        prev_pos = curr_pos;
     }
+
 
     // See if the object should be grabbed or dropped,
     // rn only check for collision, can implement more functionality
@@ -39,7 +66,10 @@ public class GluvoGrabbable : MonoBehaviour
             Rigidbody rb = GetComponent<Rigidbody>();
             rb.isKinematic = false;
             rb.useGravity = false;
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
             isHolding = true;
+            bt_debug.DisplaySingleLine(curr_vel.ToString());
         } 
         else if (isHolding)
         {
@@ -47,8 +77,12 @@ public class GluvoGrabbable : MonoBehaviour
             transform.parent = null;
             Rigidbody rb = GetComponent<Rigidbody>();
             rb.isKinematic = false;
-            rb.useGravity = true;
-            rb.velocity = trackingSpace.transform.TransformVector(OVRInput.GetLocalControllerVelocity(OVRInput.Controller.All));
+            if (!isStatic)
+            {
+                rb.useGravity = true;
+                rb.AddForce(curr_vel, ForceMode.Impulse);
+            }
+         
             // rb.angularVelocity = grabAnchor.GetComponent<Rigidbody>().angularVelocity;
         }
         // Need to reset velocity or else whacky behavior
