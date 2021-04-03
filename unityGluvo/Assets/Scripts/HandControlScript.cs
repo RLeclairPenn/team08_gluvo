@@ -30,7 +30,7 @@ public class HandControlScript : MonoBehaviour
     // We define the GameObjects we need here, they are assigned manually in the editor...
     // Note that if we change the name of those preset objects, we will have to reassign them
     // I note that because it is a very common bug
-    public GameObject bt_object; // This is the object we use to send bluetooth messages and show things on the debug screen
+    //private GameObject bt_object; // This is the object we use to send bluetooth messages and show things on the debug screen
     public GameObject right_hand_obj; // This is the right hand object as defined by Unity
     // The following are the collision spheres that go to each finger individually
     public GameObject right_thumb_sphere;
@@ -58,7 +58,8 @@ public class HandControlScript : MonoBehaviour
     void Start()
     {
         // getting bluetooth and debug script from object
-        bt_debug = (BtAndDebugScript) bt_object.GetComponent<BtAndDebugScript>();
+        
+        bt_debug = GameObject.FindGameObjectWithTag("Bluetooth").GetComponent<BtAndDebugScript>();
 
         // get right hand skeleton script, then get the list of bones
         right_hand_skeleton_info = (OVRSkeleton) right_hand_obj.GetComponent<OVRSkeleton>();

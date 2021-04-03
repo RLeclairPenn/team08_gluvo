@@ -10,15 +10,11 @@ public class GluvoGrabbable : MonoBehaviour
     // Temporary solutions, fixes the grabbed object to this location
     // Find a programmatic way to get these later
     public GameObject grabAnchor;
-    public GameObject bt_debug_obj;
     private BtAndDebugScript bt_debug;
 
 
     // Some variables for customization
-    public bool isStatic;
-    public bool freezeXRotation;
-    public bool freezeYRotation;
-    public bool freezeZRotation;
+    public bool throwable;
 
     // Keep track of fingers being collided, we need both to be
     // in collision for grabbing
@@ -43,7 +39,7 @@ public class GluvoGrabbable : MonoBehaviour
         curr_vel = Vector3.zero;
 
 
-        bt_debug = bt_debug_obj.GetComponent<BtAndDebugScript>();
+        bt_debug = GameObject.FindGameObjectWithTag("Bluetooth").GetComponent<BtAndDebugScript>();
     }
 
 
@@ -69,7 +65,7 @@ public class GluvoGrabbable : MonoBehaviour
             rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
             isHolding = true;
-            bt_debug.DisplaySingleLine(curr_vel.ToString());
+            //bt_debug.DisplaySingleLine(curr_vel.ToString());
         } 
         else if (isHolding)
         {
@@ -77,11 +73,8 @@ public class GluvoGrabbable : MonoBehaviour
             transform.parent = null;
             Rigidbody rb = GetComponent<Rigidbody>();
             rb.isKinematic = false;
-            if (!isStatic)
-            {
-                rb.useGravity = true;
-                rb.AddForce(curr_vel, ForceMode.Impulse);
-            }
+            rb.useGravity = true;
+            if (throwable) rb.AddForce(curr_vel, ForceMode.Impulse);
          
             // rb.angularVelocity = grabAnchor.GetComponent<Rigidbody>().angularVelocity;
         }

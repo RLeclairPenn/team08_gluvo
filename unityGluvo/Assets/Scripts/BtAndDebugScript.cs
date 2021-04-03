@@ -44,6 +44,7 @@ public class BtAndDebugScript : MonoBehaviour
 
     void Start()
     {
+
         string resultSearch = findDevice("ESP32test");
         AppendToMessage(resultSearch);
 
@@ -82,6 +83,8 @@ public class BtAndDebugScript : MonoBehaviour
     {
         ResetMsg();
         string msg = "T | I | M | R | P\n" + fingerArray[0] + " | " + fingerArray[1] + " | " + fingerArray[2] + " | " + fingerArray[3] + " | " + fingerArray[4];
+        string msg_esp = $"|{fingerArray[0]}|{fingerArray[1]}|{fingerArray[2]}|{fingerArray[3]}|{fingerArray[4]}";
+        sendMessage(msg_esp);
         AppendToMessage(msg);
 
     }
