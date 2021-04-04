@@ -11,6 +11,7 @@ public class GluvoGrabbable : MonoBehaviour
     // Find a programmatic way to get these later
     public GameObject grabAnchor;
     private BtAndDebugScript bt_debug;
+    private Transform originalParent;
 
 
     // Some variables for customization
@@ -38,6 +39,7 @@ public class GluvoGrabbable : MonoBehaviour
         curr_pos = Vector3.zero;
         curr_vel = Vector3.zero;
 
+        originalParent = transform.parent;
 
         bt_debug = GameObject.FindGameObjectWithTag("Bluetooth").GetComponent<BtAndDebugScript>();
     }
@@ -59,22 +61,24 @@ public class GluvoGrabbable : MonoBehaviour
         if (fingerCollisions[0] & (fingerCollisions[1] || fingerCollisions[2] || fingerCollisions[3] || fingerCollisions[4]))       
         {
             transform.parent = grabAnchor.transform;
+            isHolding = true;
             Rigidbody rb = GetComponent<Rigidbody>();
             rb.isKinematic = false;
             rb.useGravity = false;
             rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
-            isHolding = true;
+
             //bt_debug.DisplaySingleLine(curr_vel.ToString());
         } 
         else if (isHolding)
         {
             isHolding = false;
-            transform.parent = null;
+            transform.parent = originalParent;
             Rigidbody rb = GetComponent<Rigidbody>();
-            rb.isKinematic = false;
+            rb.isKinematic = false; // was false
             rb.useGravity = true;
             if (throwable) rb.AddForce(curr_vel, ForceMode.Impulse);
+
          
             // rb.angularVelocity = grabAnchor.GetComponent<Rigidbody>().angularVelocity;
         }

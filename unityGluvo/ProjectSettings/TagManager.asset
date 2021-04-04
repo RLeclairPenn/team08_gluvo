@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Bluetooth
+  - Boat
   layers:
   - Default
   - TransparentFX
