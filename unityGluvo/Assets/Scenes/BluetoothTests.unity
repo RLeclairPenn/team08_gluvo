@@ -834,6 +834,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grabAnchor: {fileID: 668195034}
   throwable: 1
+  isStatic: 0
 --- !u!54 &705387275
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1121,6 +1122,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grabAnchor: {fileID: 668195034}
   throwable: 1
+  isStatic: 0
 --- !u!54 &1013480982
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1324,6 +1326,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grabAnchor: {fileID: 668195034}
   throwable: 1
+  isStatic: 0
 --- !u!54 &1119536190
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1835,6 +1838,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grabAnchor: {fileID: 668195034}
   throwable: 0
+  isStatic: 1
 --- !u!65 &1244980321
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1959,9 +1963,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneName: Baseball
-  bt_debug_object: {fileID: 520412515}
-  changeScene: 0
-  sceneToChangeTo: 0
+  changeScene: 1
+  isThrust: 0
+  sceneToChangeTo: 1
+  speedScale: 0
 --- !u!1 &1313342909
 GameObject:
   m_ObjectHideFlags: 0

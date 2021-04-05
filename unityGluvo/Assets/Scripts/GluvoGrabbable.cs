@@ -11,11 +11,11 @@ public class GluvoGrabbable : MonoBehaviour
     // Find a programmatic way to get these later
     public GameObject grabAnchor;
     private BtAndDebugScript bt_debug;
-    private Transform originalParent;
 
 
     // Some variables for customization
     public bool throwable;
+    public bool isStatic;
 
     // Keep track of fingers being collided, we need both to be
     // in collision for grabbing
@@ -31,6 +31,7 @@ public class GluvoGrabbable : MonoBehaviour
     private Vector3 prev_pos;
     private Vector3 curr_pos;
     private Vector3 curr_vel;
+    private Transform originalParent;
 
 
     private void Start()
@@ -38,8 +39,8 @@ public class GluvoGrabbable : MonoBehaviour
         prev_pos = Vector3.zero;
         curr_pos = Vector3.zero;
         curr_vel = Vector3.zero;
-
         originalParent = transform.parent;
+
 
         bt_debug = GameObject.FindGameObjectWithTag("Bluetooth").GetComponent<BtAndDebugScript>();
     }
@@ -60,13 +61,16 @@ public class GluvoGrabbable : MonoBehaviour
     {
         if (fingerCollisions[0] & (fingerCollisions[1] || fingerCollisions[2] || fingerCollisions[3] || fingerCollisions[4]))       
         {
+            //bt_debug.DisplaySingleLine("You are colliding");
             transform.parent = grabAnchor.transform;
             isHolding = true;
             Rigidbody rb = GetComponent<Rigidbody>();
+            if (isStatic) rb.freezeRotation = false;
             rb.isKinematic = false;
             rb.useGravity = false;
             rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
+            
 
             //bt_debug.DisplaySingleLine(curr_vel.ToString());
         } 
@@ -75,9 +79,13 @@ public class GluvoGrabbable : MonoBehaviour
             isHolding = false;
             transform.parent = originalParent;
             Rigidbody rb = GetComponent<Rigidbody>();
-            rb.isKinematic = false; // was false
-            rb.useGravity = true;
+            //rb.isKinematic = false; // was false
+            rb.isKinematic = false;
+
+            if (isStatic) rb.freezeRotation = true;
+            if (!isStatic) rb.useGravity = true;
             if (throwable) rb.AddForce(curr_vel, ForceMode.Impulse);
+            
 
          
             // rb.angularVelocity = grabAnchor.GetComponent<Rigidbody>().angularVelocity;
